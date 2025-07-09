@@ -89,3 +89,11 @@ Agregar visualizaciones a partir de los resultados.
 Normalizar nombres de columnas mediante alias consistentes.
 
 Crear triggers o funciones para automatizar tareas futuras.
+
+---
+
+## ✒ Autores
+
+Adrián Ochoa
+
+GitHub: https://github.com/LAdrianOB
