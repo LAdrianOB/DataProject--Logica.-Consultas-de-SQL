@@ -11,10 +11,10 @@ select "first_name", "last_name", "actor_id"
 from "actor"
 where "actor_id" between 30 and 40;
 
-/* 4. Obtén las películas cuyo idioma coincide con el idioma original. */
+/* 4. Obtén las películas cuyo idioma coincide con el idioma original. CORREGIDO*/
 select "film_id"
 from "film"
-where "language_id" = "original_language_id"; --no da resultaos porque original_language esta lleno de nulos. 
+where "language_id" = "original_language_id" AND "original_language_id" IS NOT NULL;  
 
 /* 5. Ordena las películas por duración de forma ascendente. */
 select "film_id", "length"
@@ -78,12 +78,12 @@ from "customer"
 order by "customer_id" desc 
 limit 10;
 
-/* 17. Encuentra el nombre y apellido de los actores que aparecen en la película con título ‘Egg Igby’. */
+/* 17. Encuentra el nombre y apellido de los actores que aparecen en la película con título ‘Egg Igby’. CORREGIDO*/
 SELECT a."first_name", a."last_name"
 FROM "actor" a
 join "film_actor" fa on a.actor_id = fa.actor_id
 join "film" f on f.film_id = fa.film_id
-where "title" ilike '%Egg Igby%'; --volvemos a utilizar el ilike porque en la bbdd los nombres estan en mayus
+where "title" ilike 'Egg Igby'; --volvemos a utilizar el ilike porque en la bbdd los nombres estan en mayus
 
 /* 18. Selecciona todos los nombres de las películas únicos. */
 SELECT distinct "title"
@@ -175,12 +175,12 @@ left join actor a on a.actor_id = fa.actor_id
 group by f.title
 order by f.title; --ordenamos para poder ver la misma peli con los diferentes actores, pero mejoramos y ponemos actores en una misma linea con string_agg
 
-/* 32. Obtener todos los actores y mostrar las películas en las que han actuado, incluso si algunos actores no han actuado en ninguna película. */
+/* 32. Obtener todos los actores y mostrar las películas en las que han actuado, incluso si algunos actores no han actuado en ninguna película. CORREGIDO */
 SELECT concat(a.first_name, ' ', a.last_name) as actores, string_agg(f.title, ', ') as pelis
 FROM actor a
 left join film_actor fa on fa.actor_id = a.actor_id
 left join film f  on f.film_id  = fa.film_id 
-group by actores 
+group by a.first_name, a.last_name
 order by actores;
 
 /* 33. Obtener todas las películas que tenemos y todos los registros de alquiler. */
@@ -188,17 +188,18 @@ SELECT f.title, r.rental_id, r.rental_date
 FROM film f 
 cross join rental r;
 
-/* 34. Encuentra los 5 clientes que más dinero se hayan gastado con nosotros. */
-SELECT concat(c.first_name, ' ', c.last_name), p.amount
+/* 34. Encuentra los 5 clientes que más dinero se hayan gastado con nosotros. CORREGIDO */
+SELECT concat(c.first_name, ' ', c.last_name) AS cliente, SUM(p.amount) AS gasto_total
 FROM customer c
 join payment p on p.customer_id = c.customer_id
-order by p.amount desc 
+group by c.first_name, c.last_name
+order by gasto_total desc 
 limit 5;
 
-/* 35. Selecciona todos los actores cuyo primer nombre es 'Johnny'. */
+/* 35. Selecciona todos los actores cuyo primer nombre es 'Johnny'. CORREGIDO*/
 SELECT concat(first_name, ' ', last_name)
 FROM actor
-where first_name ilike '%johnny%' ;
+where first_name = 'Johnny' ;
 
 /* 36. Renombra la columna “first_name” como Nombre y “last_name” como Apellido. */
 
